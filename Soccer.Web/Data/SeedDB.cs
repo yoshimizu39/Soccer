@@ -419,6 +419,9 @@ namespace Soccer.Web.Data
                     }
                 });
 
+                startDate = DateTime.Today.AddMonths(3).ToUniversalTime();
+                endDate = DateTime.Today.AddMonths(5).ToUniversalTime();
+
                 await _context.SaveChangesAsync();
             }
         }
@@ -451,6 +454,16 @@ namespace Soccer.Web.Data
                 AddTeam("Uruguay");
                 AddTeam("USA");
                 AddTeam("Venezuela");
+                AddTeam_("Arsenal");
+                AddTeam_("Barcelona");
+                AddTeam_("Chelsea");
+                AddTeam_("Inter Milan");
+                AddTeam_("Leidzi");
+                AddTeam_("Leverkusen");
+                AddTeam_("Liverpool");
+                AddTeam_("Real Madrid");
+                AddTeam_("Roma");
+                AddTeam_("Valencia");
                 await _context.SaveChangesAsync();
             }
         }
@@ -458,6 +471,11 @@ namespace Soccer.Web.Data
         private void AddTeam(string name)
         {
             _context.Teams.Add(new TeamEntity { Name = name, LogoPath = $"~/images/Teams/{name}.jpg" });
+        }
+
+        private void AddTeam_(string name)
+        {
+            _context.Teams.Add(new TeamEntity { Name = name, LogoPath = $"~/images/Teams/{name}.png" });
         }
     }
 }
