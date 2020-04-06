@@ -33,8 +33,26 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
-                    <li><a asp-area="" asp-controller="Tournaments" asp-action="Index">Tournaments</a></li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))//si el user es autenticado y pertenece al rol de admin
+                    {
+                        //mostramos
+                        <li><a asp-area="" asp-controller="Teams" asp-action="Index">Teams</a></li>
+                        <li><a asp-area="" asp-controller="Tournaments" asp-action="Index">Tournaments</a></li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated) //si no està autenticado
+                    { 
+                        //muestra el user identity name para ingresar al perfìl
+                        <li><a asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a></li>
+                        //si esta autenticado muestra el logout
+                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        //si no està autenticado
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
