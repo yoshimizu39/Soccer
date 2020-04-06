@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Soccer.Web.Data.Entities
 {
@@ -17,6 +18,6 @@ namespace Soccer.Web.Data.Entities
         //    ? "https://SoccerWeb4.azurewebsites.net//images/noimage.png"
         //    ? $"https://https://SoccerWeb4.azurewebsites.net{LogoPath.Substring(1)}";    
 
-        //public ICollection<UserEntity> Users { get; set; }
+        public ICollection<UserEntity> Users { get; set; }
     }
 }

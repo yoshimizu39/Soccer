@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Soccer.Web.Data.Entities
@@ -29,6 +30,7 @@ namespace Soccer.Web.Data.Entities
         public bool IsClosed { get; set; }
 
         public GroupEntity Group { get; set; }
-        //public ICollection<PredictionEntity> Predictions { get; set; }
+
+        public ICollection<PredictionEntity> Predictions { get; set; }
     }
 }

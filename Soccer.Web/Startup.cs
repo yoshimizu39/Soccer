@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Soccer.Web.Data;
+using Soccer.Web.Data.Entities;
 using Soccer.Web.Helpers;
 
 namespace Soccer.Web
@@ -34,10 +36,21 @@ namespace Soccer.Web
                 cfg.UseSqlServer(Configuration.GetConnectionString("SoccerConnection"));
             });
 
+            services.AddIdentity<UserEntity, IdentityRole>(cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true; //email que sea ùnico
+                cfg.Password.RequireDigit = false; //no requiere dìgitos
+                cfg.Password.RequiredUniqueChars = 0; //no requiere caracteres especiales
+                cfg.Password.RequireLowercase = false; //no requiere minusculas
+                cfg.Password.RequireNonAlphanumeric = false; //no requiere caracteres especiales
+                cfg.Password.RequireUppercase = false; //no requiere mayùsculas
+            }).AddEntityFrameworkStores<DataContext>();
+
             services.AddTransient<SeedDB>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ICoverterHelper, CoverterHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
+            services.AddScoped<IUserHelper, UserHelper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -56,6 +69,7 @@ namespace Soccer.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

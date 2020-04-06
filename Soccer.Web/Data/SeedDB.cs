@@ -1,8 +1,8 @@
-﻿using Soccer.Web.Data.Entities;
-using Soccer.Web.Migrations;
+﻿using Soccer.Common.Enums;
+using Soccer.Web.Data.Entities;
+using Soccer.Web.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +11,12 @@ namespace Soccer.Web.Data
     public class SeedDB
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDB(DataContext context)
+        public SeedDB(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
@@ -22,6 +24,76 @@ namespace Soccer.Web.Data
             await _context.Database.EnsureCreatedAsync();
             await CheckTeamsAsync();
             await CheckTournamentsAsync();
+            await CheckRolesAsync();
+            await CheckUserAsync("1010", "Yoshi", "Shimizu", "yoshimizu39@outlook.es", "955221095", "Urb. Lima D-12", UserType.Admin); //crea usuario
+            await CheckUserAsync("1020", "Alanis", "Muñoz", "alanis@gmail.com", "988888888", "Urb. Lima D-12", UserType.User);
+            await CheckUserAsync("1030", "Karina", "Torres", "karina@hotmail.com", "977777777", "Urb. Lima D-12", UserType.User);
+            await CkeckPredictionsAsync();
+        }
+
+        private async Task CkeckPredictionsAsync()
+        {
+            if (!_context.Predictions.Any()) //si no hay predicciones
+            {
+                foreach (UserEntity user in _context.Users) //para cada user
+                {
+                    if (user.UserType == UserType.User) //si el user son iguales
+                    {
+                        AddPredictions(user); //realiza predicciones
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void AddPredictions(UserEntity user)
+        {
+            Random randon = new Random(); //aleatorio
+
+            foreach (MatchEntity match in _context.Matches) //por cada partido en la colecciòn de partidos
+            {
+                _context.Predictions.Add(new PredictionEntity
+                {
+                    GoalsLocal = randon.Next(0, 5), //goles aleatorios entre 0-5
+                    GoalsVisitor = randon.Next(0, 5), //goles aleatorios entre 0-5
+                    Match = match,
+                    User = user
+                });
+            }
+        }
+
+        private async Task<UserEntity> CheckUserAsync(string document, string firstName, string lastName, string email, string phone,
+                                                       string address, UserType userType)
+        {
+            UserEntity user = await _userHelper.GetUserByEmailAsync(email); //busca email
+
+            if (user == null)
+            {
+                user = new UserEntity //crea el user
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+                    PhoneNumber = phone,
+                    Address = address,
+                    Document = document,
+                    Team = _context.Teams.FirstOrDefault(), //coge el primer equipo
+                    //UserType = userType
+                };
+
+                await _userHelper.AddUserAsync(user, "123456"); //crea el usuario
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString()); //añade el role indicado
+            }
+
+            return user;
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.User.ToString());
         }
 
         private async Task CheckTournamentsAsync()
