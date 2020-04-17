@@ -8,7 +8,8 @@ namespace Soccer.Prism.ViewModels
         private TournametResponse _tournament;
         public GroupsPageViewModel(INavigationService navigationService) : base(navigationService)
         {
-            Title = "GROUPS";
+            //Title = "GROUPS";
+            
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
