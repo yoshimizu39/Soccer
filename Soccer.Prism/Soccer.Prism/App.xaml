@@ -4,8 +4,8 @@
              xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
              x:Class="Soccer.Prism.App">
 	<Application.Resources>
-
-		<!-- Application resource dictionary -->
-
+        <ResourceDictionary>
+            <x:String x:Key="UrlAPI">https://SoccerWeb4.azurewebsites.net/</x:String>
+        </ResourceDictionary>
 	</Application.Resources>
 </prism:PrismApplication>

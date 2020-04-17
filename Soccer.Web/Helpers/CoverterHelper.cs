@@ -1,7 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Soccer.Common.Models;
 using Soccer.Web.Data;
 using Soccer.Web.Data.Entities;
 using Soccer.Web.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -157,6 +161,101 @@ namespace Soccer.Web.Helpers
                 VisitorlId = entity.Visitor.Id,
                 Teams = _combo.GetComboTeams(entity.Group.Id)
             };
+        }
+
+        public TournametResponse ToTournametResponse(TournamentEntity entity)
+        {
+            return new TournametResponse
+            {
+                EndDate = entity.EndDate,
+                Id = entity.Id,
+                IsActive = entity.IsActive,
+                LogoPath = entity.LogoPath,
+                Name = entity.Name,
+                StartDate = entity.StartDate,
+                Groups = entity.Groups?.Select(g => new GroupResponse //por cada grupo me crea un groupresponse
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    GroupDetails = g.GroupDetails?.Select(gd => new GroupDetailResponse
+                    {
+                        GoalsAgaints = gd.GoalsAgaints,
+                        GoalsFor = gd.GoalsFor,
+                        Id = g.Id,
+                        MatchesLost = gd.MatchesLost,
+                        MatchesPlayed = gd.MatchesPlayed,
+                        MatchesTied = gd.MatchesTied,
+                        MatchesWon = gd.MatchesWon,
+                        Team = ToTeamResponse(gd.Team)
+                    }).ToList(),
+                    Matches = g.Matches?.Select(m => new MatchResponse
+                    {
+                        Date = m.Date,
+                        GoalsLocal = m.GoalsLocal,
+                        GoalsVisitor = m.GoalsVisitor,
+                        Id = m.Id,
+                        IsClosed = m.IsClosed,
+                        Local = ToTeamResponse(m.Local),
+                        Visitor = ToTeamResponse(m.Visitor),
+                        Predictions = m.Predictions?.Select(p => new PredictionResponse
+                        {
+                            GoalsLocal = p.GoalsLocal,
+                            GoalsVisitor = p.GoalsVisitor,
+                            Id = p.Id,
+                            Points = p.Points,
+                            User = ToUserResponse(p.User)
+                        }).ToList()
+                    }).ToList()
+                }).ToList()
+            };
+        }
+
+        private UserResponse ToUserResponse(UserEntity user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResponse
+            {
+                Address = user.Address,
+                Document = user.Document,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                Id = user.Id,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                PicturePath = user.PicturePath,
+                Team = ToTeamResponse(user?.Team),
+                UserType = user.UserType
+            };
+        }
+
+        private TeamResponse ToTeamResponse(TeamEntity team)
+        {
+            if (team == null)
+            {
+                return null;
+            }
+
+            return new TeamResponse
+            {
+                Id = team.Id,
+                LogoPath = team.LogoPath,
+                Name = team.Name
+            };
+        }
+
+        public List<TournametResponse> ToTournametResponse(List<TournamentEntity> entity)
+        {
+            List<TournametResponse> list = new List<TournametResponse>();
+            foreach (TournamentEntity tournament in entity) //por cada torneo que hay en entity
+            {
+                list.Add(ToTournametResponse(tournament)); //adicioname un tournasmentresponse
+            }
+
+            return list;
         }
     }
 }
