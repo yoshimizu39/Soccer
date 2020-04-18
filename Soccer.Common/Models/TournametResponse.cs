@@ -13,7 +13,6 @@ namespace Soccer.Common.Models
         public DateTime EndDateLocal => EndDate.ToLocalTime();
         public bool IsActive { get; set; }
         public string LogoPath { get; set; }
-
         public ICollection<GroupResponse> Groups { get; set; }
     }
 }
