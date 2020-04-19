@@ -25,7 +25,7 @@ namespace Soccer.Prism.ViewModels
                 {"tournament", this } //tournament es la llave objeto, this es el valor
             };
 
-            await _navigation.NavigateAsync(nameof(GroupsPage), parameters); //navega a GroupPage pasando un parameters
+            await _navigation.NavigateAsync(nameof(TournamentTabbedPage), parameters); //navega a GroupPage pasando un parameters
         }
     }
 }

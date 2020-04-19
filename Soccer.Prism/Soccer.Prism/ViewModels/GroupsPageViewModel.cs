@@ -1,15 +1,26 @@
 ﻿using Prism.Navigation;
+using Soccer.Common.Helpers;
 using Soccer.Common.Models;
+using System.Collections.Generic;
 
 namespace Soccer.Prism.ViewModels
 {
     public class GroupsPageViewModel : ViewModelBase
     {
+        private readonly ITransformHelper _transform;
         private TournametResponse _tournament;
-        public GroupsPageViewModel(INavigationService navigationService) : base(navigationService)
+        private List<Group> _groups;
+
+        public GroupsPageViewModel(INavigationService navigationService, ITransformHelper transform) : base(navigationService)
         {
-            //Title = "GROUPS";
-            
+            _transform = transform;
+            Title = "GROUPS";
+        }
+
+        public List<Group> Groups
+        {
+            get => _groups;
+            set => SetProperty(ref _groups, value);
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
@@ -18,7 +29,7 @@ namespace Soccer.Prism.ViewModels
 
             //trae un TournamentResponse de acuerdo a la llave tournament que le asignamos en la clase TournamentItemViewModel
             _tournament = parameters.GetValue<TournametResponse>("tournament");
-            Title = _tournament.Name;
+            Groups = _transform.ToGroups(_tournament.Groups); //en tournamentresponse en el atributo GROUP tiene que devolver un List<>
         }
     }
 }

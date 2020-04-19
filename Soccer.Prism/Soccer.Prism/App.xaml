@@ -2,10 +2,69 @@
 <prism:PrismApplication xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="Soccer.Prism.App">
-	<Application.Resources>
+    <Application.Resources>
         <ResourceDictionary>
             <x:String x:Key="UrlAPI">https://SoccerWeb4.azurewebsites.net/</x:String>
+
+            <DataTemplate
+                x:Key="MatchTemplate">
+                <StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ffimageloading:CachedImage
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            CacheDuration="50"
+                            HeightRequest="90"
+                            RetryCount="3"
+                            RetryDelay="600"
+                            Source="{Binding Local.LogoFullPath}"
+                            WidthRequest="90"/>
+                        <StackLayout
+                            Grid.Column="1"
+                            VerticalOptions="Center">
+                            <StackLayout
+                                HorizontalOptions="Center"
+                                Orientation="Horizontal">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="48"
+                                    Text="{Binding GoalsLocal}"></Label>
+                                <Label
+                                    VerticalOptions="Center"
+                                    Text="Vs."></Label>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="48"
+                                    Text="{Binding GoalsVisitor}"></Label>
+                            </StackLayout>
+                            <StackLayout
+                                Orientation="Horizontal"
+                                HorizontalOptions="Center">
+                                <Label
+                                    Text="{Binding DateLocal, StringFormat='{0:yyyy/MM/dd HH:mm}'}"
+                                    VerticalOptions="Center"></Label>
+                            </StackLayout>
+                        </StackLayout>
+                        <ffimageloading:CachedImage
+                            Grid.Column="2"
+                            Aspect="AspectFit"
+                            CacheDuration="50"
+                            HeightRequest="90"
+                            RetryCount="3"
+                            RetryDelay="600"
+                            Source="{Binding Visitor.LogoFullPath}"
+                            WidthRequest="90"/>
+                    </Grid>
+                </StackLayout>
+            </DataTemplate>
+            
         </ResourceDictionary>
-	</Application.Resources>
+    </Application.Resources>
 </prism:PrismApplication>
