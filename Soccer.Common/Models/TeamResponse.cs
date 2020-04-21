@@ -7,5 +7,9 @@
         public string Name { get; set; }
 
         public string LogoPath { get; set; }
+
+        public string LogoFullPath => string.IsNullOrEmpty(LogoPath)
+        ? "https://SoccerWeb4.azurewebsites.net//images/noimage.png"
+:       $"https://zulusoccer.blob.core.windows.net/teams/{LogoPath}";
     }
 }

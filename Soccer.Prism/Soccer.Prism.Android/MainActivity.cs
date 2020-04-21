@@ -6,7 +6,12 @@ using Prism.Ioc;
 
 namespace Soccer.Prism.Droid
 {
-    [Activity(Label = "Soccer.Prism", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(
+        Label = "Soccer.Prism",
+        Icon = "@mipmap/ic_launcher",
+        Theme = "@style/MainTheme",
+        MainLauncher = false, //no arranca el proyecto
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)

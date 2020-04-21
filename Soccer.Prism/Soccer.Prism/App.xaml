@@ -7,6 +7,48 @@
     <Application.Resources>
         <ResourceDictionary>
             <x:String x:Key="UrlAPI">https://SoccerWeb4.azurewebsites.net/</x:String>
+            
+            <!--Colors-->
+            <Color x:Key="ColorBackground">#45857C</Color>
+            <Color x:Key="ColorBackgroundMasterDetail">#025E73</Color>
+            <Color x:Key="ColorIndicator">#A6785D</Color> 
+            <!--<Color x:Key="ColorPrimary">#3A606E</Color>
+            <Color x:Key="ColorBackground">#3A606E</Color>
+            <Color x:Key="ColorBackground">#3A606E</Color>
+            <Color x:Key="ColorBackground">#3A606E</Color>
+            <Color x:Key="ColorBackground">#3A606E</Color>
+            <Color x:Key="ColorBackground">#3A606E</Color>-->
+
+            <!--Style-->
+            <!--<Style
+                TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource }"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="TextColor" Value="{StaticResource }"/>
+            </Style>
+            <Style
+                TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource }"/>
+            </Style>
+            <Style
+                x:Key="SecondaryButton"
+                TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource }"/>
+            </Style>
+            <Style
+                x:Key="DangerButton"
+                TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource }"/>
+                <Setter Property="TextColor" Value="{StaticResource }"/>
+            </Style>
+            <Style
+                TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="{StaticResource }"/>
+            </Style>
+            <Style
+                TargetType="Picker">
+                <Setter Property="BackgroundColor" Value="{StaticResource }"/>
+            </Style>-->
 
             <DataTemplate
                 x:Key="MatchTemplate">

@@ -4,64 +4,78 @@
              xmlns:prism="http://prismlibrary.com"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:i18n="clr-namespace:Soccer.Prism.Helpers"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true"
              x:Class="Soccer.Prism.Views.TournamentsPage"
+             BackgroundColor="{StaticResource ColorBackground}"
+             IconImageSource="tournament"
              Title="{Binding Title}">
 
-    <StackLayout
-        Padding="5">
-        <CollectionView
-            ItemsSource="{Binding Tournaments}">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical"/>
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SelectTournamentCommand}"/>
-                        </Grid.GestureRecognizers>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <!--se acomoda en el spacio que tenga-->
-                        <ffimageloading:CachedImage
-                            Grid.Column="0"
-                            Aspect="AspectFit"
-                            Source="{Binding LogoFullPath}"
-                            CacheDuration="50"
-                            Margin="5"
-                            RetryCount="3"
-                            RetryDelay="600"
-                            WidthRequest="100"/>
-                        <StackLayout
-                            Grid.Column="1"
-                            VerticalOptions="Center">
-                            <!--si es chiquito el fono recorta agrgando ...-->
-                            <Label
-                                Text="{Binding Name}"
-                                FontAttributes="Bold"
-                                FontSize="Medium"
-                                LineBreakMode="TailTruncation"></Label>
-                            <Label
-                                Text="{Binding StartDateLocal, StringFormat='{0:yyy/MM/dd}'}"
-                                FontAttributes="Italic"
-                                VerticalOptions="End"
-                                LineBreakMode="TailTruncation"></Label>
-                            <Label
-                                Text="{Binding EndDateLocal, StringFormat='{0:yyy/MM/dd}'}"
-                                FontAttributes="Italic"
-                                VerticalOptions="End"
-                                LineBreakMode="TailTruncation"></Label>
-                        </StackLayout>
-                        <Image
-                            Grid.Column="2"
-                            Source="ic_more_vert.png"></Image>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
-    
+    <AbsoluteLayout>
+        <StackLayout
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            Padding="5">
+            <CollectionView
+                ItemsSource="{Binding Tournaments}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectTournamentCommand}"/>
+                            </Grid.GestureRecognizers>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <!--se acomoda en el spacio que tenga-->
+                            <ffimageloading:CachedImage
+                                Grid.Column="0"
+                                Aspect="AspectFit"
+                                Source="{Binding LogoFullPath}"
+                                CacheDuration="50"
+                                Margin="5"
+                                RetryCount="3"
+                                RetryDelay="600"
+                                WidthRequest="100"/>
+                            <StackLayout
+                                Grid.Column="1"
+                                VerticalOptions="Center">
+                                <!--si es chiquito el fono recorta agrgando ...-->
+                                <Label
+                                    Text="{Binding Name}"
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    LineBreakMode="TailTruncation"></Label>
+                                <Label
+                                    Text="{Binding StartDateLocal, StringFormat='{0:yyy/MM/dd}'}"
+                                    FontAttributes="Italic"
+                                    VerticalOptions="End"
+                                    LineBreakMode="TailTruncation"></Label>
+                                <Label
+                                    Text="{Binding EndDateLocal, StringFormat='{0:yyy/MM/dd}'}"
+                                    FontAttributes="Italic"
+                                    VerticalOptions="End"
+                                    LineBreakMode="TailTruncation"></Label>
+                            </StackLayout>
+                            <Image
+                                Grid.Column="2"
+                                Source="ic_more_vert"></Image>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+        <ActivityIndicator
+            AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+            AbsoluteLayout.LayoutFlags="All"
+            Color="{StaticResource ColorIndicator}"
+            IsVisible="{Binding IsRunning}"
+            IsRunning="{Binding IsRunning}"></ActivityIndicator>
+    </AbsoluteLayout>
 </ContentPage>

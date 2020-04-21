@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:prism="http://prismlibrary.com"
+                  prism:ViewModelLocator.AutowireViewModel="True"
+                  xmlns:i18n="clr-namespace:Soccer.Prism.Helpers"
+                  xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+                  ios:Page.UseSafeArea="true"
+                  x:Class="Soccer.Prism.Views.SoccerMasterDetailPage">
+
+    <MasterDetailPage.Master>
+        <ContentPage 
+            BackgroundColor="{StaticResource ColorBackgroundMasterDetail}"
+            Title="Menu">
+            <ContentPage.Padding>
+                <OnPlatform
+                    x:TypeArguments="Thickness">
+                    <On Platform="Android, UWP">0</On>
+                    <On Platform="iOS">0,20,0,0</On>
+                </OnPlatform>
+            </ContentPage.Padding>
+            <StackLayout Padding="20">
+                <Image
+                    HeightRequest="150"
+                    Source="soccer"></Image>
+
+                <!--HasUnevenRows="True", para que la filas puedan tener diferente tamaño de acuerdo al contenido-->
+                <ListView
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding Menus}"
+                    HasUnevenRows="True"
+                    SeparatorVisibility="None"> <!--sin lìnia-->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SselectMenuCommand}"/>
+                                    </Grid.GestureRecognizers>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Grid.Column="0"
+                                        HeightRequest="32"
+                                        Margin="5"
+                                        Source="{Binding Icon}"
+                                        WidthRequest="32"></Image>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        VerticalOptions="Center"
+                                        TextColor="Black"
+                                        Text="{Binding Title}"></Label>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ContentPage>
+    </MasterDetailPage.Master>
+    
+</MasterDetailPage>
