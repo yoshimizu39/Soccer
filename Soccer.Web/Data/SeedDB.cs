@@ -66,7 +66,7 @@ namespace Soccer.Web.Data
         private async Task<UserEntity> CheckUserAsync(string document, string firstName, string lastName, string email, string phone,
                                                        string address, UserType userType)
         {
-            UserEntity user = await _userHelper.GetUserByEmailAsync(email); //busca email
+            UserEntity user = await _userHelper.GetUserAsync(email); //busca email
 
             if (user == null)
             {
