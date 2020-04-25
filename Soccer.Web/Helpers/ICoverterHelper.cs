@@ -8,6 +8,8 @@ namespace Soccer.Web.Helpers
 {
     public interface ICoverterHelper
     {
+        PredictionResponse ToPredictionResponse(PredictionEntity predictionEntity);
+        MatchResponse ToMatchResponse(MatchEntity matchEntity);
         TeamEntity ToTeamEntity(TeamViewModel model, string path, bool isNew);
         TeamViewModel ToTeamViewModel(TeamEntity teamEntity);
         TournamentEntity ToTournamentEntity(TournametViewModel model, string path, bool isNew);
