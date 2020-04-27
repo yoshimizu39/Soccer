@@ -84,6 +84,17 @@ namespace Soccer.Web.Helpers
             }
         }
 
+        public async Task<IdentityResult> ConfirmEmailAsync(UserEntity userEntity, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(userEntity, token);
+        }
+
+        //string se almacena todo el token se envìa al user
+        public async Task<string> GenerateEmailConfirmationTokenAsync(UserEntity userEntity)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(userEntity);
+        }
+
         //public async Task<UserEntity> GetUserByEmailAsync(string email)
         //{
         //    return await _userManager.FindByEmailAsync(email);
@@ -123,6 +134,11 @@ namespace Soccer.Web.Helpers
         public async Task<IdentityResult> UpdateUserAsync(UserEntity user)
         {
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<SignInResult> ValidatePasswordAsync(UserEntity userEntity, string password)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(userEntity, password, false); //false no permite que se bloquee el logueo de varios intentos
         }
     }
 }

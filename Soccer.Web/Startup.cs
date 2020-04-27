@@ -7,9 +7,11 @@ using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Soccer.Web.Data;
 using Soccer.Web.Data.Entities;
 using Soccer.Web.Helpers;
+using System.Text;
 
 namespace Soccer.Web
 {
@@ -39,7 +41,16 @@ namespace Soccer.Web
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
-
+            //valida el token
+            services.AddAuthentication().AddCookie().AddJwtBearer(cfg =>
+            {
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["Tokens:Issuer"],
+                    ValidAudience = Configuration["Tokens:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                };
+            });
 
             services.AddDbContext<DataContext>(cfg =>
             {
@@ -54,13 +65,18 @@ namespace Soccer.Web
                 cfg.Password.RequireLowercase = false; //no requiere minusculas
                 cfg.Password.RequireNonAlphanumeric = false; //no requiere caracteres especiales
                 cfg.Password.RequireUppercase = false; //no requiere mayùsculas
-            }).AddEntityFrameworkStores<DataContext>();
+                cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider; //generador de token
+                cfg.SignIn.RequireConfirmedEmail = true; //requiere confirmaciòn de cuenta email
+            })
+                .AddDefaultTokenProviders() //adiciona el generador de token
+                .AddEntityFrameworkStores<DataContext>();
 
             services.AddTransient<SeedDB>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ICoverterHelper, CoverterHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<IMailHelper, MailHelper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

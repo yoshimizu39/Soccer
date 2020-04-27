@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Soccer.Web.Controllers.API
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] //tipo de token de seguridad
     [Route("api/[controller]")]
     [ApiController]
     public class PredictionsController : ControllerBase

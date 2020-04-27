@@ -12,6 +12,9 @@ namespace Soccer.Web.Helpers
 {
     public interface IUserHelper
     {
+        Task<string> GenerateEmailConfirmationTokenAsync(UserEntity userEntity); //se genera token y se envìa al correo del nuevo user
+        Task<IdentityResult> ConfirmEmailAsync(UserEntity userEntity, string token); //mètodo que se ejecuta cuando el user nuevo confirma el mesage enviado a su cuenta
+        Task<SignInResult> ValidatePasswordAsync(UserEntity userEntity, string password);
         Task<IdentityResult> ChangePasswordAsync(UserEntity user, string oldPassword, string newPassword);
         Task<IdentityResult> UpdateUserAsync(UserEntity user);
         Task<UserEntity> AddUserAsync(AddUserViewModel model, string path, UserType userType);

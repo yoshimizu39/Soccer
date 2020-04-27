@@ -26,8 +26,8 @@ namespace Soccer.Web.Data
             await CheckTournamentsAsync();
             await CheckRolesAsync();
             await CheckUserAsync("1010", "Yoshi", "Shimizu", "yoshimizu39@outlook.es", "955221095", "Urb. Lima D-12", UserType.Admin); //crea usuario
-            await CheckUserAsync("1020", "Alanis", "Muñoz", "alanis@gmail.com", "988888888", "Urb. Lima D-12", UserType.User);
-            await CheckUserAsync("1030", "Karina", "Torres", "karina@hotmail.com", "977777777", "Urb. Lima D-12", UserType.User);
+            //await CheckUserAsync("1020", "Alanis", "Shimizu", "alanis@gmail.com", "988888888", "Urb. Lima D-12", UserType.User);
+            //await CheckUserAsync("1030", "Karina", "Torres", "karina@hotmail.com", "977777777", "Urb. Lima D-12", UserType.User);
             await CkeckPredictionsAsync();
         }
 
@@ -80,11 +80,14 @@ namespace Soccer.Web.Data
                     Address = address,
                     Document = document,
                     Team = _context.Teams.FirstOrDefault(), //coge el primer equipo
-                    //UserType = userType
+                    UserType = userType
                 };
 
                 await _userHelper.AddUserAsync(user, "123456"); //crea el usuario
                 await _userHelper.AddUserToRoleAsync(user, userType.ToString()); //añade el role indicado
+
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
 
             return user;

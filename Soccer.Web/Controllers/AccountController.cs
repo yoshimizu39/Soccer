@@ -1,11 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Soccer.Common.Enums;
 using Soccer.Web.Data;
 using Soccer.Web.Data.Entities;
 using Soccer.Web.Helpers;
 using Soccer.Web.Models;
+using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Soccer.Web.Controllers
@@ -17,16 +24,22 @@ namespace Soccer.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration; //se usa cuando necesitamos leer datos de appsettings.json
+        private readonly IMailHelper _mail;
 
         public AccountController(IUserHelper userHelper,
                                  ICombosHelper combosHelper,
                                  IImageHelper imageHelper,
-                                 DataContext context)
+                                 DataContext context,
+                                 IConfiguration configuration,
+                                 IMailHelper mail)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _imageHelper = imageHelper;
             _context = context;
+            _configuration = configuration;
+            _mail = mail;
         }
 
         public IActionResult Login()
@@ -42,6 +55,69 @@ namespace Soccer.Web.Controllers
         public IActionResult NotAuthorized()
         {
             return View();
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userid, string token)
+        {
+            if (string.IsNullOrEmpty(userid) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
+
+            UserEntity user = await _userHelper.GetUserAsync(new Guid(userid));
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            IdentityResult result = await _userHelper.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return NotFound();
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserAsync(model.UserName); //busca el user
+                if (user != null)
+                {
+                    var result = await _userHelper.ValidatePasswordAsync(user, model.Password); //valida que el password es el correcto del user
+                    if (result.Succeeded)
+                    {
+                        //agregamos clains al token
+                        var claims = new[]
+                        {
+                            new Claim(JwtRegisteredClaimNames.Sub, user.Email), //agregamos el email
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) //y un GUID para poder combinar
+                        };
+
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"])); //encriptamos el key
+                        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); //con un algoritmo
+                        var token = new JwtSecurityToken(_configuration["Tokens:Issuer"], //buscamos los valores de Issuer
+                                                         _configuration["Tokens:Audience"], //y de Audience
+                                                         claims,
+                                                         expires: DateTime.UtcNow.AddDays(99), //asigna expiraciòn al token
+                                                         signingCredentials: credentials);
+
+                        //devolvemos el valor del token y de la expiraciòn
+                        var results = new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                            expiration = token.ValidTo
+                        };
+
+                        return Created(string.Empty, results); //devolvemos el token
+                    }
+                }
+            }
+
+            return BadRequest(); //si no funciona devuelve error 400
         }
 
         public IActionResult ChangePassword()
@@ -153,18 +229,42 @@ namespace Soccer.Web.Controllers
                 }
 
                 //logueamos por còdigo
-                LoginViewModel loginViewModel = new LoginViewModel
-                {
-                    Password = model.Password,
-                    RememberMe = false,
-                    UserName = model.Username
-                };
+                //LoginViewModel loginViewModel = new LoginViewModel
+                //{
+                //    Password = model.Password,
+                //    RememberMe = false,
+                //    UserName = model.Username
+                //};
 
-                var result2 = await _userHelper.LoginAsync(loginViewModel);
-                if (result2.Succeeded)
+                //var result2 = await _userHelper.LoginAsync(loginViewModel);
+                //if (result2.Succeeded)
+                //{
+                //    return RedirectToAction("Index", "Home");
+                //}
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user); //dame token para el user
+
+                //creamos link para enviar al nuevo user
+                //ConfirEmail es una acciòn
+                var tokenlink = Url.Action("ConfirmEmail", "Account", new
                 {
-                    return RedirectToAction("Index", "Home");
+                    //enviamos el
+                    userid = user.Id, //còdigo del user
+                    token = myToken //y token
+                }, protocol: HttpContext.Request.Scheme);
+
+                var response = _mail.SendMail(model.Username,
+                                              "Email Confirmation",
+                                              $"<h1>Email Confirmation</h1>" +
+                                              $"To allow the user. " +
+                                              $"please click in this link:</br></br><a href=\"{tokenlink}\">Confirm Email</a>"); //tokenlink enviamos el link
+
+                if (response.IsSuccess)
+                {
+                    ViewBag.Message = "The instructions to allow your user has been sent to email.";
+                    return View(model);
                 }
+
+                ModelState.AddModelError(string.Empty, response.Message);
             }
 
             //y si falla mandamos a la vista con el combo
