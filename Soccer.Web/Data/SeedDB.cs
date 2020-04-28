@@ -28,7 +28,16 @@ namespace Soccer.Web.Data
             await CheckUserAsync("1010", "Yoshi", "Shimizu", "yoshimizu39@outlook.es", "955221095", "Urb. Lima D-12", UserType.Admin); //crea usuario
             //await CheckUserAsync("1020", "Alanis", "Shimizu", "alanis@gmail.com", "988888888", "Urb. Lima D-12", UserType.User);
             //await CheckUserAsync("1030", "Karina", "Torres", "karina@hotmail.com", "977777777", "Urb. Lima D-12", UserType.User);
+            await CheckUsersAsync();
             await CkeckPredictionsAsync();
+        }
+
+        private async Task CheckUsersAsync()
+        {
+            for (int i = 1; i <= 100; i++)
+            {
+                await CheckUserAsync($"100{i}", "User", $"{i}", $"user{i}@yopmail.com", "350 634 2747", "Calle Luna del Sol", UserType.User);
+            }
         }
 
         private async Task CkeckPredictionsAsync()

@@ -12,6 +12,8 @@ namespace Soccer.Web.Helpers
 {
     public interface IUserHelper
     {
+        Task<string> GeneratePasswordResetTokenAsync(UserEntity userEntity);
+        Task<IdentityResult> ResetPasswordAsync(UserEntity userEntity, string token, string password);
         Task<string> GenerateEmailConfirmationTokenAsync(UserEntity userEntity); //se genera token y se envìa al correo del nuevo user
         Task<IdentityResult> ConfirmEmailAsync(UserEntity userEntity, string token); //mètodo que se ejecuta cuando el user nuevo confirma el mesage enviado a su cuenta
         Task<SignInResult> ValidatePasswordAsync(UserEntity userEntity, string password);

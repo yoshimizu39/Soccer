@@ -19,13 +19,19 @@ namespace Soccer.Web.Controllers
         private readonly ICoverterHelper _converter;
         private readonly IImageHelper _image;
         private readonly ICombosHelper _combo;
+        private readonly IMatchHelper _match;
 
-        public TournamentsController(DataContext context, ICoverterHelper converter, IImageHelper image, ICombosHelper combo)
+        public TournamentsController(DataContext context,
+                                     ICoverterHelper converter,
+                                     IImageHelper image, 
+                                     ICombosHelper combo,
+                                     IMatchHelper match)
         {
             _context = context;
             _converter = converter;
             _image = image;
             _combo = combo;
+            _match = match;
         }
 
         #region Tournament
@@ -481,6 +487,62 @@ namespace Soccer.Web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction($"{nameof(DetailsGroup)}/{entity.Group.Id}");
+        }
+        #endregion
+
+        #region Match
+        public async Task<IActionResult> CloseMatch(int? id) //valida id al cerrar
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //buscamos el partido
+            var matchentity = await _context.Matches.Include(m => m.Group)
+                                                    .Include(m => m.Local)
+                                                    .Include(m => m.Visitor)
+                                                    .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (matchentity == null)
+            {
+                return NotFound();
+            }
+
+            //armamos el modelo
+            ClosMatchViewModel model = new ClosMatchViewModel
+            {
+                Group = matchentity.Group,
+                GroupId = matchentity.Group.Id,
+                Local = matchentity.Local,
+                LocalId = matchentity.Local.Id,
+                MatchId = matchentity.Id,
+                Visitor = matchentity.Visitor,
+                VisitorId = matchentity.Visitor.Id
+            };
+
+            return View(model); //el model pide cuales fueron los goles del loca y visitor y una opciòn de close
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseMatch(ClosMatchViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //envìa el partido y cantidad de goles realizados por el local y el visitor
+                await _match.CloseMatchAsync(model.MatchId, model.GoalsLocal.Value, model.GoalsVisitor.Value);
+
+                //direcciona al detailgroup de ese grupo
+                return RedirectToAction($"{nameof(DetailsGroup)}/{model.GroupId}");
+            }
+
+            //si hay error vuelve a armar
+            model.Group = await _context.Groups.FindAsync(model.GroupId);
+            model.Local = await _context.Teams.FindAsync(model.LocalId);
+            model.Visitor = await _context.Teams.FindAsync(model.VisitorId);
+
+            return View(model);
         }
         #endregion
     }

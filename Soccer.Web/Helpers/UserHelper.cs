@@ -95,6 +95,11 @@ namespace Soccer.Web.Helpers
             return await _userManager.GenerateEmailConfirmationTokenAsync(userEntity);
         }
 
+        public async Task<string> GeneratePasswordResetTokenAsync(UserEntity userEntity)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(userEntity);
+        }
+
         //public async Task<UserEntity> GetUserByEmailAsync(string email)
         //{
         //    return await _userManager.FindByEmailAsync(email);
@@ -129,6 +134,11 @@ namespace Soccer.Web.Helpers
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync(); //deslogueate
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(UserEntity userEntity, string token, string password)
+        {
+            return await _userManager.ResetPasswordAsync(userEntity, token, password);
         }
 
         public async Task<IdentityResult> UpdateUserAsync(UserEntity user)
