@@ -133,10 +133,10 @@
     <value>JJ</value>
   </data>
   <data name="MW" xml:space="preserve">
-    <value>MG</value>
+    <value>PG</value>
   </data>
   <data name="MT" xml:space="preserve">
-    <value>MT</value>
+    <value>ME</value>
   </data>
   <data name="ML" xml:space="preserve">
     <value>MP</value>
@@ -145,7 +145,7 @@
     <value>DP</value>
   </data>
   <data name="GD" xml:space="preserve">
-    <value>DB</value>
+    <value>GB</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Chargement...</value>

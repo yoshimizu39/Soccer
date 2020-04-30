@@ -12,6 +12,7 @@ namespace Soccer.Prism.Helpers
 
         public string LocaleCode { get; private set; }
 
+
         public PlatfomrCulture(string platformCultureString)
         {
             if (string.IsNullOrEmpty(platformCultureString))

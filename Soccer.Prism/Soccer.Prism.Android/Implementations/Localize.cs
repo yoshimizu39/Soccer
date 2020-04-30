@@ -15,6 +15,7 @@ namespace Soccer.Prism.Droid.Implementations
             string netLanguage = "en";
             Java.Util.Locale androidLocale = Java.Util.Locale.Default;
             netLanguage = AndroidToDotnetLanguage(androidLocale.ToString().Replace("_", "-"));
+
             // this gets called a lot - try/catch can be expensive so consider caching or something
             CultureInfo ci = null;
             try
@@ -36,6 +37,7 @@ namespace Soccer.Prism.Droid.Implementations
                     ci = new CultureInfo("en");
                 }
             }
+
             return ci;
         }
 

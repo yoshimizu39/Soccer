@@ -1,6 +1,7 @@
 ﻿using Soccer.Common.Interfaces;
 //using Soccer.Prism.Interfaces;
 using Soccer.Prism.Resources;
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace Soccer.Prism.Helpers
@@ -10,13 +11,15 @@ namespace Soccer.Prism.Helpers
         static Languages()
         {
             //DependencyService.Get pide la dependencia de ILocalize (iOS/Android) y ejecuta GetCurrentCultureInfo
-            var ci = DependencyService.Get<ILocalize>().GetCurrentCultureInfo();
+            CultureInfo ci = DependencyService.Get<ILocalize>().GetCurrentCultureInfo();
 
             //al archivo de resource le asigna GetCurrentCultureInfo, es decir que muestre el idioma en inglès o españil
             Resource.Culture = ci;
-
+            Culture = ci.Name;            
             DependencyService.Get<ILocalize>().SetLocale(ci);
         }
+
+        public static string Culture { get; set; }
 
         public static string Accept => Resource.Accept;
 
