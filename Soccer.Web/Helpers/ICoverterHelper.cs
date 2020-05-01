@@ -22,6 +22,6 @@ namespace Soccer.Web.Helpers
         MatchViewModel ToMatchViewModelAsync(MatchEntity entity);
         TournametResponse ToTournametResponse(TournamentEntity entity);
         List<TournametResponse> ToTournametResponse(List<TournamentEntity> entity);
-
+        UserResponse ToUserResponse(UserEntity userEntity);
     }
 }

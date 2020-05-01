@@ -23,11 +23,136 @@ namespace Soccer.Web.Controllers.API
     {
         private readonly DataContext _context;
         private readonly ICoverterHelper _coverter;
+        private readonly IUserHelper _userHelper;
 
-        public PredictionsController(DataContext context, ICoverterHelper coverter)
+        public PredictionsController(DataContext context,
+                                     ICoverterHelper coverter,
+                                     IUserHelper userHelper)
         {
             _context = context;
             _coverter = coverter;
+            _userHelper = userHelper;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPositionsByTournament([FromRoute] int id) //id del torneo
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            TournamentEntity tournament = await _context.Tournaments.Include(t => t.Groups)                                                                    .Include(t => t.Groups)
+                                                                    .ThenInclude(g => g.Matches)
+                                                                    .ThenInclude(m => m.Predictions)
+                                                                    .ThenInclude(p => p.User)
+                                                                    .ThenInclude(u => u.Team)
+                                                                    .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tournament == null)
+            {
+                return BadRequest("Tournament doesn't exists.");
+            }
+
+            //creamos la lista de predicciones
+            List<PositionResponse> positionsResponses = new List<PositionResponse>();
+            foreach (GroupEntity group in tournament.Groups) //por cada grupo en el torneo
+            {
+                foreach (MatchEntity match in group.Matches) //por cda partido del grupo
+                {
+                    foreach (PredictionEntity prediction in match.Predictions) //por cada predicciòn del partido
+                    {
+                        //buscamos si el user realizò una predicciòn del partido
+                        PositionResponse positionResponse = positionsResponses.FirstOrDefault(p => p.UserResponse.Id == prediction.User.Id);
+                        if (positionResponse == null)
+                        {
+                            positionsResponses.Add(new PositionResponse //adicionamos a la lista
+                            {
+                                Points = prediction.Points, //suma los puntos obtenidos
+                                UserResponse = _coverter.ToUserResponse(prediction.User)
+                            });
+                        }
+                        else
+                        {
+                            positionResponse.Points += prediction.Points; //suma los puntos si el user no es nuevo
+                        }
+                    }
+                }
+            }
+
+            //ordenamos descendentemente por los puntos
+            List<PositionResponse> list = positionsResponses.OrderByDescending(p => p.Points).ToList();
+            int i = 1;
+            foreach (PositionResponse item in list) //a cada item
+            {
+                item.Ranking = i; //le asignamos el puesto
+                i++;
+            }
+
+            return Ok(list);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostPrediction([FromBody] PredictionRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            CultureInfo cultureInfo = new CultureInfo(request.CultureInfo);
+            Resource.Culture = cultureInfo;
+
+            MatchEntity matchEntity = await _context.Matches.FindAsync(request.MatchId);
+            if (matchEntity == null)
+            {
+                return BadRequest(Resource.MatchDoesntExists);
+            }
+
+            if (matchEntity.IsClosed)
+            {
+                return BadRequest(Resource.MatchAlreadyClosed);
+            }
+
+            UserEntity userEntity = await _userHelper.GetUserAsync(request.UserId);
+            if (userEntity == null)
+            {
+                return BadRequest(Resource.UserDoesntExists);
+            }
+
+            //si el partido ya empezò
+            if (matchEntity.Date <= DateTime.UtcNow)
+            {
+                return BadRequest(Resource.MatchAlreadyStarts); //no deja realizar predicciones
+            }
+
+            //buscamos la predicciòn de ese user y el partido
+            PredictionEntity predictionEntity = await _context.Predictions
+                                                      .FirstOrDefaultAsync(p => p.User.Id == request.UserId.ToString() &&
+                                                      p.Match.Id == request.MatchId);
+
+            if (predictionEntity == null)
+            {
+                predictionEntity = new PredictionEntity //predicciòn nueva
+                {
+                    GoalsLocal = request.GoalsLocal,
+                    GoalsVisitor = request.GoalsVisitor,
+                    Match = matchEntity,
+                    User = userEntity
+                };
+
+                _context.Predictions.Add(predictionEntity);
+            }
+            else
+            {
+                predictionEntity.GoalsLocal = request.GoalsLocal;
+                predictionEntity.GoalsVisitor = request.GoalsVisitor;
+                _context.Predictions.Update(predictionEntity);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpPost]

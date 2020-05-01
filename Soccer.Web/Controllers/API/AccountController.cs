@@ -22,16 +22,41 @@ namespace Soccer.Web.Controllers.API
         private readonly IUserHelper _userHelper;
         private readonly IMailHelper _mailHelper;
         private readonly IImageHelper _imageHelper;
+        private readonly ICoverterHelper _coverterHelper;
 
         public AccountController(DataContext context,
                                  IUserHelper userHelper,
                                  IMailHelper mailHelper,
-                                 IImageHelper imageHelper)
+                                 IImageHelper imageHelper,
+                                 ICoverterHelper coverterHelper)
         {
             _context = context;
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _imageHelper = imageHelper;
+            _coverterHelper = coverterHelper;
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail([FromBody] EmailRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            CultureInfo cultureInfo = new CultureInfo(request.CultureInfo);
+            Resource.Culture = cultureInfo;
+
+            UserEntity user = await _userHelper.GetUserAsync(request.Email);
+            if (user == null)
+            {
+                return NotFound(Resource.UserDoesntExists);
+            }
+
+            return Ok(_coverterHelper.ToUserResponse(user));
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

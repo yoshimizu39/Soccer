@@ -210,7 +210,7 @@ namespace Soccer.Web.Helpers
             };
         }
 
-        private UserResponse ToUserResponse(UserEntity user)
+        public UserResponse ToUserResponse(UserEntity user)
         {
             if (user == null)
             {
@@ -283,5 +283,6 @@ namespace Soccer.Web.Helpers
                 Visitor = ToTeamResponse(matchEntity.Visitor)
             };
         }
+
     }
 }
