@@ -41,7 +41,7 @@ namespace Soccer.Web.Data.Entities
         [Display(Name = "User")]
         public string FullNameWithDocument => $"{FirstName}{LastName}-{Document}";
 
-        public int Points => Predictions == null ? 0 : Predictions.Sum(p => p.Points);
+        public int Points => Predictions == null ? 0 : Predictions.Sum(p => p.Points); //suma todos los puntos de las predicciones
 
         public ICollection<PredictionEntity> Predictions { get; set; }
     }

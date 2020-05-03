@@ -15,7 +15,7 @@ namespace Soccer.Prism.Helpers
 
             //al archivo de resource le asigna GetCurrentCultureInfo, es decir que muestre el idioma en inglès o españil
             Resource.Culture = ci;
-            Culture = ci.Name;            
+            Culture = ci.ToString(); //obtiene el lenguaje del sistema            
             DependencyService.Get<ILocalize>().SetLocale(ci);
         }
 
@@ -26,6 +26,7 @@ namespace Soccer.Prism.Helpers
         public static string ConnectionError => Resource.ConnectionError;
 
         public static string Error => Resource.Error;
+
         public static string Name => Resource.Name;
 
         public static string MP => Resource.MP;
@@ -51,5 +52,23 @@ namespace Soccer.Prism.Helpers
         public static string ModifyUser => Resource.ModifyUser;
 
         public static string Login => Resource.Login;
+
+        public static string PasswordPlaceHolder => Resource.PasswordPlaceHolder;
+
+        public static string PasswordError => Resource.PasswordError;
+
+        public static string Register => Resource.Register;
+
+        public static string Email => Resource.Email;
+
+        public static string EmailPlaceHolder => Resource.EmailPlaceHolder;
+
+        public static string EmailError => Resource.EmailError;
+
+        public static string Password => Resource.Password;
+
+        public static string LoginError => Resource.LoginError;
+
+        public static string Logout => Resource.Logout;
     }
 }

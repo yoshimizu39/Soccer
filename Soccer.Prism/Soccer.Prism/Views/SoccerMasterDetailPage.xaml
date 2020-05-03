@@ -5,12 +5,14 @@
                   prism:ViewModelLocator.AutowireViewModel="True"
                   xmlns:i18n="clr-namespace:Soccer.Prism.Helpers"
                   xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+                  xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                  xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                   ios:Page.UseSafeArea="true"
                   x:Class="Soccer.Prism.Views.SoccerMasterDetailPage">
 
     <MasterDetailPage.Master>
         <ContentPage 
-            BackgroundColor="{StaticResource ColorBackgroundMasterDetail}"
+            BackgroundColor="{StaticResource ColorBackgroundMD}"
             Title="Menu">
             <ContentPage.Padding>
                 <OnPlatform
@@ -20,16 +22,57 @@
                 </OnPlatform>
             </ContentPage.Padding>
             <StackLayout Padding="20">
-                <Image
-                    HeightRequest="150"
-                    Source="soccer"></Image>
+                
+                <!--<RelativeLayout>//permite colocar una imágen encima de otra imágen-->
+                <!--RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1,Constant=60}" coloca 60px al lado izquierdo-->
+                <RelativeLayout>
+                    <Image x:Name="Logo" HorizontalOptions="Center"
+                           RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1,Constant=60}"
+                           HeightRequest="150"
+                           Source="soccer"/>
+                    <ffimageloading:CachedImage x:Name="Picture" 
+                                                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=Logo,Property=Y,Factor=1,Constant=60}"
+                                                Aspect="AspectFill"
+                                                Source="{Binding User.PictureFullPath}" 
+                                                CacheDuration= "50"
+                                                HeightRequest="100"
+                                                Margin="5"
+                                                RetryCount= "3"
+                                                RetryDelay= "600"
+                                                WidthRequest="100">
+                    <ffimageloading:CachedImage.Transformations>
+                        <fftransformations:CircleTransformation />
+                    </ffimageloading:CachedImage.Transformations>
+                    </ffimageloading:CachedImage>
+                    <ffimageloading:CachedImage x:Name="Team" 
+                                                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=Picture,Property=Y,Factor=1,Constant=50}"
+                                                RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=Picture,Property=X,Factor=1,Constant=60}"
+                                                Aspect="AspectFill"
+                                                Source="{Binding User.Team.LogoFullPath}" 
+                                                CacheDuration= "50"
+                                                HeightRequest="50"
+                                                Margin="5"
+                                                RetryCount= "3"
+                                                RetryDelay= "600"
+                                                WidthRequest="50">
+                    <ffimageloading:CachedImage.Transformations>
+                        <fftransformations:CircleTransformation />
+                    </ffimageloading:CachedImage.Transformations>
+                    </ffimageloading:CachedImage>
+                    <Label RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=Picture,Property=Y,Factor=1,Constant=110}"
+                           FontAttributes="Bold"
+                           FontSize="Large"
+                           Text="{Binding User.FullName}"
+                           TextColor="Black"/>
+                </RelativeLayout>
 
                 <!--HasUnevenRows="True", para que la filas puedan tener diferente tamaño de acuerdo al contenido-->
                 <ListView
                     BackgroundColor="Transparent"
                     ItemsSource="{Binding Menus}"
                     HasUnevenRows="True"
-                    SeparatorVisibility="None"> <!--sin lìnia-->
+                    SeparatorVisibility="None">
+                    <!--sin lìnia-->
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -61,5 +104,5 @@
             </StackLayout>
         </ContentPage>
     </MasterDetailPage.Master>
-    
+
 </MasterDetailPage>

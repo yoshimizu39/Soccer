@@ -34,6 +34,38 @@ namespace Soccer.Web.Controllers.API
             _userHelper = userHelper;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPositions()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //traemos los Users, Team, Predictions
+            List<UserEntity> users = await _context.Users.Include(u => u.Team)
+                                                         .Include(u => u.Predictions)
+                                                         .ToListAsync();
+
+            //por cada user creamos una postionresponse
+            List<PositionResponse> positionResponses = users.Select(u => new PositionResponse
+            {
+                Points = u.Points,
+                UserResponse = _coverter.ToUserResponse(u)
+            }).ToList();
+
+            //creamos una lista de posiciones y la ordenamos descendentemente por los puntos
+            List<PositionResponse> list = positionResponses.OrderByDescending(pr => pr.Points).ToList();
+            int i = 1;
+            foreach (var item in list)
+            {
+                item.Ranking = i;
+                i++;
+            }
+
+            return Ok(list);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPositionsByTournament([FromRoute] int id) //id del torneo
         {

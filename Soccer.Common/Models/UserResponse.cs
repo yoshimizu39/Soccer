@@ -14,7 +14,10 @@ namespace Soccer.Common.Models
         public string PicturePath { get; set; }
         public UserType UserType { get; set; }
         public TeamResponse Team { get; set; }
-        public string FullName => $"{FirstName}{LastName}";
+        public string FullName => $"{FirstName} {LastName}";
         public string FullNameWithDocument => $"{FirstName}{LastName}-{Document}";
+        public string PictureFullPath => string.IsNullOrEmpty(PicturePath)
+        ? "https://SoccerWeb4.azurewebsites.net//images/noimage.png"
+        : $"https://zulusoccer.blob.core.windows.net/users/{PicturePath}"; //concatena lo que contiene PicturePath en la posiciòn 1
     }
 }

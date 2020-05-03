@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
+using Soccer.Common.Helpers;
 using Soccer.Common.Models;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,13 @@ namespace Soccer.Prism.ViewModels
 
         private async void SelectMenuAsync()
         {
-            await _navigationService.NavigateAsync($"/SoccerMasterDetailPage/NavigationPage/{PageName}");
+            if (PageName == "LoginPage" && Settings.IsLogin) //si estoy en loginpage y logueado
+            {
+                Settings.IsLogin = false;
+                Settings.User = null;
+                Settings.Token = null;
+            }
+            await _navigationService.NavigateAsync($"/SoccerMasterDetailPage/NavigationPage/{PageName}"); //navega al loginpage
         }
     }
 }
