@@ -8,7 +8,7 @@
         <ResourceDictionary>
 
             <x:String x:Key="UrlAPI">https://SoccerWeb4.azurewebsites.net/</x:String>
-            <!--<x:String x:Key="UrlAPI">https://localhost:44389/</x:String>--> 
+            <x:String x:Key="UrlNoImage">https://SoccerWeb4.azurewebsites.net/images/noimage.png</x:String>
 
             <!--Colors-->
             <Color x:Key="ColorBackground">#45857C</Color>
@@ -17,9 +17,15 @@
             <Color x:Key="ColorBackgroundLogin">#0697D6</Color>
             <Color x:Key="ColorBackgroundEntry">#F5F0E4</Color>
             <Color x:Key="ColorText">#2F3137</Color>
+            <Color x:Key="ColorPicker">#EBD8D5</Color>
             <Color x:Key="ColorBackgroundButton">#C1C3C4</Color>
 
             <!--Style-->
+            <Style
+                x:Key="Picker"
+                TargetType="Picker">
+                <Setter Property="BackgroundColor" Value="{StaticResource ColorPicker}" />
+            </Style>
             <Style
                 x:Key="Button"
                 TargetType="Button">

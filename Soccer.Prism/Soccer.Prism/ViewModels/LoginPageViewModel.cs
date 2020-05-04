@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Soccer.Common.Helpers;
 using Soccer.Common.Models;
 using Soccer.Common.Services;
 using Soccer.Prism.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xamarin.Forms;
+using Soccer.Prism.Views;
 
 namespace Soccer.Prism.ViewModels
 {
@@ -21,7 +17,7 @@ namespace Soccer.Prism.ViewModels
         private bool _isEnabled;
         private string _password;
         private DelegateCommand _loginCommand;
-        //private DelegateCommand _registerCommand;
+        private DelegateCommand _registerCommand;
 
 
         public LoginPageViewModel(INavigationService navigationService,
@@ -55,6 +51,7 @@ namespace Soccer.Prism.ViewModels
 
 
         public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(LoginAsync));
+        public DelegateCommand RegisterCommand => _registerCommand ?? (_registerCommand = new DelegateCommand(RegisterAsync));
 
         private async void LoginAsync()
         {
@@ -125,6 +122,11 @@ namespace Soccer.Prism.ViewModels
             await _navigationService.NavigateAsync("/SoccerMasterDetailPage/NavigationPage/TournamentsPage");
             Password = string.Empty;
 
+        }
+
+        private async void RegisterAsync()
+        {
+            await _navigationService.NavigateAsync(nameof(RegisterPage));
         }
     }
 }
