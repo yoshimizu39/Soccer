@@ -273,4 +273,49 @@
   <data name="PictureSource" xml:space="preserve">
     <value>PictureSource!</value>
   </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>ForgotPassword</value>
+  </data>
+  <data name="PasswordRecover" xml:space="preserve">
+    <value>PasswordRecover!</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>ChangePassword</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>UserUpdated!</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>CONFIRMNEWPASSWORD</value>
+  </data>
+  <data name="ConfirmNewPasswordError" xml:space="preserve">
+    <value>ConfirmNewPasswordError!</value>
+  </data>
+  <data name="ConfirmNewPasswordError2" xml:space="preserve">
+    <value>ConfirmNewPasswordError2!</value>
+  </data>
+  <data name="ConfirmNewPasswordPlaceHolder" xml:space="preserve">
+    <value>ConfirmNewPasswordPlaceHolder!</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Mot de passe actuel!</value>
+  </data>
+  <data name="CurrentPasswordError" xml:space="preserve">
+    <value>CurrentPasswordError!</value>
+  </data>
+  <data name="CurrentPasswordPlaceHolder" xml:space="preserve">
+    <value>CurrentPasswordPlaceHolder!</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>NewPassword</value>
+  </data>
+  <data name="NewPasswordError" xml:space="preserve">
+    <value>NewPasswordError!</value>
+  </data>
+  <data name="NewPasswordPlaceHolder" xml:space="preserve">
+    <value>NewPasswordPlaceHolder!</value>
+  </data>
 </root>

@@ -67,8 +67,8 @@
                         </thead>
                         <tbody>
                             @foreach (var item in Model.GroupDetails.OrderByDescending(g => g.Points)
-                                                                   .ThenByDescending(g => g.GoalsDifference)
-                                                                   .ThenByDescending(g => g.GoalsFor))
+                                                                  .ThenByDescending(g => g.GoalsDifference)
+                                                                  .ThenByDescending(g => g.GoalsFor))
                             {
                                 <tr>
                                     <td>
@@ -161,32 +161,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="/js/deleteDialog.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable();
 
-            //delete item
-            var item_to_delete
-            var to_delete
+            // Delete item
+            sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Tournaments/DeleteGroupDetail/', false);
 
-            $('.deleteItem').click((e) => {
-                to_delete = 1
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $('.deleteItemMatch').click((e) => {
-                to_delete = 2
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $('#btnYesDelete').click(function () {
-                if (to_delete == 1) {
-                    window.location.href = '/Tournaments/DeleteGroupDetail/' + item_to_delete;
-                }
-                else {
-                    window.location.href = '/Tournaments/DeleteMatch/' + item_to_delete;
-                }
-            });
+            sc_deleteDialog.openModal('deleteItemMatch', true, 'btnYesDelete', '/Tournaments/DeleteMatch/', false);
         });
     </script>
 }

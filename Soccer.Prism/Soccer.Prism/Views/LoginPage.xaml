@@ -2,12 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+           	 xmlns:i18n="clr-namespace:Soccer.Prism.Helpers"
              prism:ViewModelLocator.AutowireViewModel="True"
-             xmlns:i18n="clr-namespace:Soccer.Prism.Helpers"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-             ios:Page.UseSafeArea="true"
              x:Class="Soccer.Prism.Views.LoginPage"
-             IconImageSource="login"
              BackgroundColor="{StaticResource ColorBackgroundLogin}"
              Title="{Binding Title}">
 
@@ -20,39 +17,51 @@
                    Margin="0,20,0,0"
                    HorizontalOptions="Center"
                    Source="soccer"/>
-            <Grid Margin="20" 
+            <StackLayout
+                VerticalOptions="CenterAndExpand">
+                <Grid Margin="20" 
                   VerticalOptions="CenterAndExpand">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" 
                        Grid.Row="0"
                        HorizontalTextAlignment="End"
                        Text="{i18n:Translate Email}"
                        Style="{StaticResource Label}"
                        VerticalOptions="Center"/>
-                <Entry Grid.Column="1"
+                    <Entry Grid.Column="1"
                        Grid.Row="0"
                        BackgroundColor="{StaticResource ColorBackgroundEntry}"
                        Keyboard="Email"
                        Placeholder="{i18n:Translate EmailPlaceHolder}"
                        Style="{StaticResource Entry}"
                        Text="{Binding Email}"/>
-                <Label Grid.Column="0" 
+                    <Label Grid.Column="0" 
                        Grid.Row="1"
                        HorizontalTextAlignment="End"
                        Style="{StaticResource Label}"
                        Text="{i18n:Translate Password}"
                        VerticalOptions="Center"/>
-                <Entry Grid.Column="1"
+                    <Entry Grid.Column="1"
                        Grid.Row="1"
                        BackgroundColor="{StaticResource ColorBackgroundEntry}"
                        IsPassword="True"
                        Placeholder="{i18n:Translate PasswordPlaceHolder}"
                        Style="{StaticResource Entry}"
                        Text="{Binding Password}"/>
-            </Grid>
+                </Grid>
+                <Label
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center" 
+                    Text="{i18n:Translate ForgotPassword}"
+                    Style="{StaticResource LabelForgot}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
             <StackLayout>
                 <Button
                     Command="{Binding LoginCommand}" 

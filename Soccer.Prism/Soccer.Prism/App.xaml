@@ -19,8 +19,16 @@
             <Color x:Key="ColorText">#2F3137</Color>
             <Color x:Key="ColorPicker">#EBD8D5</Color>
             <Color x:Key="ColorBackgroundButton">#C1C3C4</Color>
-
+            <Color x:Key="ColorForgot">#123159</Color>
+            
             <!--Style-->
+            <Style
+                x:Key="LabelForgot"
+                TargetType="Label">
+                <Setter Property="BackgroundColor" Value="{StaticResource ColorForgot}" />
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="Default"/>
+            </Style>
             <Style
                 x:Key="Picker"
                 TargetType="Picker">
