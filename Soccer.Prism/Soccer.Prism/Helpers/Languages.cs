@@ -155,5 +155,26 @@ namespace Soccer.Prism.Helpers
 
         public static string NewPasswordPlaceHolder => Resource.NewPasswordPlaceHolder;
 
+        public static string Real => Resource.Real;
+
+        public static string Prediction => Resource.Prediction;
+
+        public static string Points => Resource.Points;
+
+        public static string Open => Resource.Open;
+
+        public static string MatchAlreadyStarts => Resource.MatchAlreadyStarts;
+
+        public static string LocalGoalsError => Resource.LocalGoalsError;
+
+        public static string VisitorGoalsError => Resource.VisitorGoalsError;
+
+        public static string Update => Resource.Update;
+
+        public static string SelectTournament => Resource.SelectTournament;
+
+        public static string PredictionsFor => Resource.PredictionsFor;
+
+        public static string Closed => Resource.Closed;
     }
 }

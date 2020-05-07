@@ -4,6 +4,7 @@ using Prism.Navigation;
 using Soccer.Common.Helpers;
 using Soccer.Common.Models;
 using Soccer.Prism.Views;
+using System;
 
 namespace Soccer.Prism.ViewModels
 {
@@ -11,6 +12,7 @@ namespace Soccer.Prism.ViewModels
     {
         private readonly INavigationService _navigation;
         private DelegateCommand _selectTournamentCommand;
+        private DelegateCommand _selectTournament2Command;
 
         public TournamentItemViewModel(INavigationService navigation)
         {
@@ -19,6 +21,18 @@ namespace Soccer.Prism.ViewModels
 
         public DelegateCommand SelectTournamentCommand => _selectTournamentCommand ?? //si no esta establecido
                                                          (_selectTournamentCommand = new DelegateCommand(SelectTournamentAsync));
+
+        public DelegateCommand SelectTournament2Command => _selectTournament2Command ?? (_selectTournament2Command = new DelegateCommand(SelectTournamentForPredictionAsync));
+
+        private async void SelectTournamentForPredictionAsync()
+        {
+            NavigationParameters parameters = new NavigationParameters
+            {
+                {"tournament", this }
+            };
+
+            await _navigation.NavigateAsync(nameof(PredictionsTabbedPage), parameters);
+        }
 
         private async void SelectTournamentAsync()
         {

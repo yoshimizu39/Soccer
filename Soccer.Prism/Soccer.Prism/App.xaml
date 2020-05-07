@@ -12,15 +12,16 @@
 
             <!--Colors-->
             <Color x:Key="ColorBackground">#45857C</Color>
-            <Color x:Key="ColorBackgroundMD">#025E73</Color>    
-            <Color x:Key="ColorIndicator">#A6785D</Color>
+            <Color x:Key="ColorBackgroundMD">#025E73</Color>
+            <Color x:Key="ColorBackgroundPredicciones">#C1D9CC</Color>
             <Color x:Key="ColorBackgroundLogin">#0697D6</Color>
             <Color x:Key="ColorBackgroundEntry">#F5F0E4</Color>
+            <Color x:Key="ColorIndicator">#A6785D</Color>
             <Color x:Key="ColorText">#2F3137</Color>
             <Color x:Key="ColorPicker">#EBD8D5</Color>
             <Color x:Key="ColorBackgroundButton">#C1C3C4</Color>
             <Color x:Key="ColorForgot">#123159</Color>
-            
+
             <!--Style-->
             <Style
                 x:Key="LabelForgot"

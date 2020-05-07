@@ -1,0 +1,162 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"         	
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+           	 xmlns:i18n="clr-namespace:Soccer.Prism.Helpers"
+             ios:Page.UseSafeArea="true"
+             x:Class="Soccer.Prism.Views.ClosedPredictionsForTournamentPage"
+             BackgroundColor="{StaticResource ColorBackgroundPredicciones}"
+             IconImageSource="ic_action_face"
+             Title="{Binding Title}">
+
+    <AbsoluteLayout>
+        <StackLayout
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All" 
+            Padding="5">
+            <CollectionView
+                ItemsSource="{Binding Predictions}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        VerticalItemSpacing="5">
+                    </GridItemsLayout>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            CornerRadius="10">
+                            <StackLayout>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout
+                                        Grid.Column="0">
+                                        <ffimageloading:CachedImage
+                                            Aspect="AspectFill"
+                                            CacheDuration= "50"
+                                            HeightRequest="90"
+                                            RetryCount= "3"
+                                            RetryDelay= "600"
+                                            WidthRequest="90"
+                                            Source="{Binding Match.Local.LogoFullPath}" />
+                                        <Label
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Match.Local.Name}"
+                                            FontAttributes="Bold"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2"
+                                            WidthRequest="90"></Label>
+                                        <Label
+                                            HorizontalOptions="Center" 
+                                            FontAttributes="Bold"
+                                            FontSize="Large"
+                                            Text="{i18n:Translate Real}"
+                                            Style="{StaticResource Label}"/>
+                                        <StackLayout
+                                            HorizontalOptions="Center" 
+                                            Orientation="Horizontal">
+                                            <Label 
+                                                FontAttributes="Bold"
+                                                FontSize="48"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding Match.GoalsLocal}"
+                                                WidthRequest="45"/>
+                                            <Label
+                                                Text="Vs."
+                                                VerticalOptions="Center"/>
+                                            <Label 
+                                                FontAttributes="Bold"
+                                                FontSize="48"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding Match.GoalsVisitor}"
+                                                WidthRequest="45"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                    <StackLayout
+                                        Grid.Column="1"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center">
+                                        <StackLayout
+                                            BackgroundColor="Azure" 
+                                            HorizontalOptions="Center"
+                                            Orientation="Vertical">
+                                            <Label 
+                                                FontAttributes="Bold"  
+                                                FontSize="Medium"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{i18n:Translate Points}"
+                                                Style="{StaticResource Label}"/>
+                                            <Label
+                                                FontAttributes="Bold"  
+                                                FontSize="48" 
+                                                HorizontalTextAlignment="Center" 
+                                                Text="{Binding Points}"
+                                                Style="{StaticResource Label}"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                    <StackLayout
+                                        Grid.Column="2">
+                                        <ffimageloading:CachedImage 
+                                            Aspect="AspectFit"
+                                            CacheDuration= "50"
+                                            HeightRequest="90"
+                                            RetryCount= "3"
+                                            RetryDelay= "600"
+                                            Source="{Binding Match.Visitor.LogoFullPath}" 
+                                            WidthRequest="90"/>
+                                        <Label
+                                            HorizontalOptions="Center" 
+                                            HorizontalTextAlignment="Center"
+                                            FontAttributes="Bold"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2"
+                                            Text="{Binding Match.Visitor.Name}"
+                                            WidthRequest="90"/>
+                                        <Label
+                                            HorizontalOptions="Center" 
+                                            FontAttributes="Bold"
+                                            FontSize="Large"
+                                            Text="{i18n:Translate Prediction}"
+                                            Style="{StaticResource Label}"/>
+                                        <StackLayout
+                                            HorizontalOptions="Center" 
+                                            Orientation="Horizontal">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="48"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding GoalsLocal}"
+                                                WidthRequest="45"/>
+                                            <Label
+                                                Text="Vs."
+                                                VerticalOptions="Center"/>
+                                            <Label 
+                                                FontAttributes="Bold"
+                                                FontSize="48"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding GoalsVisitor}"
+                                                WidthRequest="45"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+        <ActivityIndicator
+            AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+            AbsoluteLayout.LayoutFlags="All"
+            Color="{StaticResource ColorIndicator}"
+            IsVisible="{Binding IsRunning}"
+            IsRunning="{Binding IsRunning}"></ActivityIndicator>
+    </AbsoluteLayout>
+
+</ContentPage>
