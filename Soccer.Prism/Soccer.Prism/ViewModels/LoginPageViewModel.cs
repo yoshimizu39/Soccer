@@ -77,8 +77,7 @@ namespace Soccer.Prism.ViewModels
             IsEnabled = false;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
-            bool cnx = await _apiService.CheckConnectionAsync(url);
-            if (!cnx)
+            if (!_apiService.CheckConnection())
             {
                 IsRunning = true;
                 IsEnabled = false;

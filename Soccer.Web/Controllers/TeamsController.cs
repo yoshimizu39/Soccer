@@ -18,7 +18,9 @@ namespace Soccer.Web.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly ICoverterHelper _converterHelper;
 
-        public TeamsController(DataContext context, IImageHelper imageHelper, ICoverterHelper converterHelper)
+        public TeamsController(DataContext context, 
+                               IImageHelper imageHelper,
+                               ICoverterHelper converterHelper)
         {
             _context = context;
             _imageHelper = imageHelper;

@@ -15,7 +15,6 @@ namespace Soccer.Prism.ViewModels
         public CloseMatchesPageViewModel(INavigationService navigationService) : base(navigationService)
         {
             Title = "CLOSED";
-            LoadMatches();
         }
 
         public List<MatchResponse> Matches
@@ -24,11 +23,15 @@ namespace Soccer.Prism.ViewModels
             set => SetProperty(ref _matches, value);
         }
 
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            base.OnNavigatedTo(parameters);
+            _tournamet = parameters.GetValue<TournametResponse>("tournament");
+            LoadMatches();
+        }
+
         private void LoadMatches()
         {
-            //deserializa el <TournametResponse> de acuerdo a lo que trae el Settings.Tournament
-            //de esa manera pasamos el torneo o datos a las otras pestañas
-            _tournamet = JsonConvert.DeserializeObject<TournametResponse>(Settings.Tournament);
             //Title = _tournamet.Name;
             List<MatchResponse> matches = new List<MatchResponse>(); //obtiene la colecciòn de matches
 

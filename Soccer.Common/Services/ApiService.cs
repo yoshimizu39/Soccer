@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Plugin.Connectivity;
+//using Plugin.Connectivity;
 using Soccer.Common.Models;
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace Soccer.Common.Services
 {
@@ -41,14 +42,9 @@ namespace Soccer.Common.Services
 
         }
 
-        public async Task<bool> CheckConnectionAsync(string url)
+        public bool CheckConnection()
         {
-            if (!CrossConnectivity.Current.IsConnected) //valida si en modo aviòn tiene datos
-            {
-                return false;
-            }
-
-            return await CrossConnectivity.Current.IsRemoteReachable(url); //ping a la url
+            return Connectivity.NetworkAccess == NetworkAccess.Internet;
         }
 
 

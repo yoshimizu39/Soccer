@@ -14,8 +14,8 @@ namespace Soccer.Common.Models
         public bool IsActive { get; set; }
         public string LogoPath { get; set; }
         public string LogoFullPath => string.IsNullOrEmpty(LogoPath)
-    ? "https://SoccerWeb4.azurewebsites.net//images/noimage.png"
-    : $"https://zulusoccer.blob.core.windows.net/tournaments/{LogoPath}";
+        ? "https://SoccerWeb4.azurewebsites.net//images/noimage.png"
+        : $"https://zulusoccer.blob.core.windows.net/tournaments/{LogoPath}";
         public List<GroupResponse> Groups { get; set; }
     }
 }
